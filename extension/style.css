@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  width: 300px;
+}
+
+#chatbox {
+  display: flex;
+  flex-direction: column;
+}
+
+#messages {
+  height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+input[type="text"] {
+  padding: 5px;
+  margin-bottom: 5px;
+  width: calc(100% - 10px);
+}
+
+button {
+  padding: 5px;
+}

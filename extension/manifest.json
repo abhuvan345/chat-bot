@@ -1,16 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "MCQ Helper",
+  "name": "Gemini Chatbot",
   "version": "1.0",
-  "description": "Get answers to MCQ questions with AI",
+  "description": "Chat with Gemini AI",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "index.html"
   },
-  "permissions": ["activeTab", "scripting"],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["popup.js"]
-    }
-  ]
+  "permissions": ["scripting"],
+  "host_permissions": ["https://generativelanguage.googleapis.com/*"]
 }
