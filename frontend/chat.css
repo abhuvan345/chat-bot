@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 10px;
+  background: #f9f9f9;
+}
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+input {
+  padding: 8px;
+  width: calc(100% - 60px);
+}
+button {
+  width: 50px;
+  padding: 8px;
+  margin-left: 5px;
+}

@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Gemini Chatbot",
+  "version": "1.0",
+  "description": "A floating chatbot powered by Gemini API",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Open Gemini Chat"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["chat.html", "chat.css", "chat.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
