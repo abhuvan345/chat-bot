@@ -14,12 +14,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Initialize Gemini
+// Initialize Gemini with correct API version
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'healthy', gemini: 'connected' });
+  res.status(200).json({ 
+    status: 'healthy',
+    gemini: 'connected',
+    apiVersion: 'v1beta' // Confirm this matches your API access
+  });
 });
 
 app.post('/answer-mcq', async (req, res) => {
@@ -30,8 +33,13 @@ app.post('/answer-mcq', async (req, res) => {
       return res.status(400).json({ error: 'Question is required' });
     }
 
-    // Get the Gemini Pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    // Use the correct model name for your API version
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.0-pro", // Updated model name
+      generationConfig: {
+        maxOutputTokens: 1000
+      }
+    });
 
     const prompt = `Answer the following question concisely:
     Question: ${question}
@@ -48,10 +56,15 @@ app.post('/answer-mcq', async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error:', error);
+    console.error('API Error Details:', {
+      message: error.message,
+      status: error.status,
+      stack: error.stack
+    });
+    
     res.status(500).json({ 
       error: 'Failed to process question',
-      details: error.message
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
 });
