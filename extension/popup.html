@@ -1,35 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MCQ Helper</title>
+  <title>Question Answerer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="popup-container">
-    <h1>MCQ Helper</h1>
-    <div class="input-group">
-      <textarea id="question" placeholder="Paste your MCQ question here"></textarea>
+  <div class="container">
+    <h1>Ask Your Question</h1>
+    <textarea id="questionInput" placeholder="Paste your question here..."></textarea>
+    <button id="submitBtn">Get Answer</button>
+    <div class="response-container">
+      <h3>Answer:</h3>
+      <div id="answerOutput"></div>
     </div>
-    <div class="options-container">
-      <div class="option">
-        <label>A:</label>
-        <input type="text" id="optionA" placeholder="Option A">
-      </div>
-      <div class="option">
-        <label>B:</label>
-        <input type="text" id="optionB" placeholder="Option B">
-      </div>
-      <div class="option">
-        <label>C:</label>
-        <input type="text" id="optionC" placeholder="Option C">
-      </div>
-      <div class="option">
-        <label>D:</label>
-        <input type="text" id="optionD" placeholder="Option D">
-      </div>
-    </div>
-    <button id="getAnswer">Get Answer</button>
-    <div id="answer" class="answer-container"></div>
   </div>
   <script src="popup.js"></script>
 </body>

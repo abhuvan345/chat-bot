@@ -13,19 +13,19 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.post('/answer-mcq', async (req, res) => {
     try {
-        const { question, options } = req.body;
+        const { question } = req.body;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        if (!question) {
+            return res.status(400).json({ error: 'Question is required' });
+        }
+
+        const model = genAI.getGenerativeAI({ model: "gemini-pro" });
         
-        const prompt = `
-        You are an expert at answering multiple choice questions. 
-        Given the following question and options, provide the most likely correct answer.
-        Only respond with the letter of the correct option (A, B, C, etc.) and a very brief explanation.
+        const prompt = `Answer the following question in a clear and concise manner:
         
         Question: ${question}
-        Options:
-        ${options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join('\n')}
-        `;
+        
+        Provide a direct answer with a brief explanation if needed.`;
         
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -34,7 +34,10 @@ app.post('/answer-mcq', async (req, res) => {
         res.json({ answer: text.trim() });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to process question' });
+        res.status(500).json({ 
+            error: 'Failed to process question',
+            details: error.message 
+        });
     }
 });
 
