@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 app.use(cors());
@@ -9,8 +9,10 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Example Gemini API endpoint and payload — adjust as per actual Gemini API docs
-const GEMINI_API_URL = 'https://generativeai.googleapis.com/v1beta2/models/gemini-pro:generateText';
+// Initialize client with API key from env
+const client = new GoogleGenerativeAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 app.post('/chat', async (req, res) => {
   try {
@@ -19,32 +21,16 @@ app.post('/chat', async (req, res) => {
       return res.status(400).json({ error: 'No prompt provided' });
     }
 
-    // Build request payload for Gemini API - adjust to the actual API spec
-    const requestBody = {
-      prompt: {
-        text: prompt
-      },
-      // Add other Gemini API parameters if needed
-    };
+    // Call Gemini's chat completion (adjust model name as per your access)
+    const response = await client.chat.completions.create({
+      model: 'gemini-1a', // Use your actual available model name here
+      messages: [{ role: 'user', content: prompt }],
+    });
 
-    // Call Gemini API
-    const response = await axios.post(
-      GEMINI_API_URL,
-      requestBody,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`
-        }
-      }
-    );
-
-    // Extract response text from Gemini response
-    const reply = response.data?.candidates?.[0]?.output || 'No reply from Gemini';
-
+    const reply = response.choices?.[0]?.message?.content || 'No reply from Gemini';
     res.json({ reply });
   } catch (error) {
-    console.error('Error calling Gemini API:', error.response?.data || error.message);
+    console.error('Error calling Gemini API:', error);
     res.status(500).json({ error: 'Failed to fetch response from Gemini API' });
   }
 });
